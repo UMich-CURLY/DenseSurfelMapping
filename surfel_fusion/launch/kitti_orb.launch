@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="surfel_fusion" type="surfel_fusion" name="surfel_fusion" clear_params="true" output="screen">
+  <node pkg="surfel_fusion" type="surfel_fusion" name="surfel_fusion" clear_params="true" output="screen"  >
 
     <!-- camera parameter -->
     <param name="cam_width" value="1241" />
@@ -19,7 +19,7 @@
     <param name="drift_free_poses" value="10" />
 
     <!-- for data save -->
-    <!-- <param name="save_name" value="/home/wang/bag/surfel_fusion/results/kitti/kitti00_loop" /> -->
+    <param name="save_name" value="/home/rayzhang/kitti00_loop" />
 
     <remap from="~image" to="/left_image" />
     <remap from="~depth" to="/depth_image" />

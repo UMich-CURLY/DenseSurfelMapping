@@ -20,24 +20,32 @@ if __name__ == '__main__':
     depth_pub = rospy.Publisher("depth_image", Image, queue_size=100)
     depth_visual_pub = rospy.Publisher("depth_visual_image", Image, queue_size=100)
 
-    path_name = "/hdd_6t/kitti_odometry/gray/sequences/00"
+
+    
+    path_name = "/home/rayzhang/code/docker_home/media/Samsung_T5/kitti/00/"
+    calib_file = path_name + "/cvo_calib.txt"
+    
+    with open(calib_file, "r") as f:
+        line = f.readline().split()
+        fx, fy, cy, fy, baseline = line
     image_index = 0
     rate = rospy.Rate(5)
     cv2.namedWindow("left")
     cv2.moveWindow("left", 100, 100)
     cv2.waitKey(0)
-    while True:
+    while image_index < 1000:
         print(image_index)
-        left_img_path = path_name + "/image_0/%06d.png"%image_index
-        right_img_path = path_name + "/image_1/%06d.png"%image_index
-        depth_path = path_name + "/depth_0/%06d.npy" % image_index
+        left_img_path = path_name + "/image_2/%06d.png"%image_index
+        right_img_path = path_name + "/image_3/%06d.png"%image_index
+        depth_path = path_name + "/depth/%06d.npy" % image_index
         if (not os.path.isfile(left_img_path)) or (not os.path.isfile(right_img_path)):
             break
 
-        left_img = cv2.imread(left_img_path,0)
-        right_img = cv2.imread(right_img_path,0)
-        depth_np = np.load(depth_path)
-        depth_np = 386.1448 / depth_np  #00-02
+        left_img = cv2.cvtColor(cv2.imread(left_img_path), cv2.COLOR_BGR2GRAY)
+        right_img = cv2.cvtColor(cv2.imread(right_img_path), cv2.COLOR_BGR2GRAY)
+        depth_np = np.load(depth_path).reshape((left_img.shape[0], left_img.shape[1]))
+        
+        # depth_np = 386.1448 / depth_np  #00-02
         # depth_np = 379.8145 / depth_np  #04-12
         depth_visual = np.clip(depth_np, 0.5, 60)
         depth_visual = depth_visual / 60.0 * 255.0
@@ -67,5 +75,5 @@ if __name__ == '__main__':
         cv2.imshow("left", left_img)
         input_key = cv2.waitKey(10)
 
-        if input_key == 27:
+        if input_key == ord('s'): #27:
             break

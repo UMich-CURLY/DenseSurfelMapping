@@ -364,14 +364,14 @@ void SurfelMap::orb_results_input(
     synchronize_msgs();
 }
 
-void SurfelMap::pose_ros2eigen(geometry_msgs::Pose &pose, Eigen::Matrix4d &T)
+void SurfelMap::pose_ros2eigen(const geometry_msgs::Pose &pose, Eigen::Ref<Eigen::Matrix4d> T)
 {
+    Eigen::Quaterniond rotation_q(pose.orientation.w, pose.orientation.x, pose.orientation.y, pose.orientation.z);
     T = Eigen::Matrix4d::Identity();
-    Eigen::Quaterniond rotation_q;
-    rotation_q.w() = pose.orientation.w;
-    rotation_q.x() = pose.orientation.x;
-    rotation_q.y() = pose.orientation.y;
-    rotation_q.z() = pose.orientation.z;
+    //rotation_q.w() = pose.orientation.w;
+    //rotation_q.x() = pose.orientation.x;
+    //rotation_q.y() = pose.orientation.y;
+    //rotation_q.z() = pose.orientation.z;
     T.block<3,3>(0,0) = rotation_q.toRotationMatrix();
     T(0,3) = pose.position.x;
     T(1,3) = pose.position.y;

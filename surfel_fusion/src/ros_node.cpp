@@ -20,6 +20,9 @@ int main(int argc, char **argv)
   ros::NodeHandle nh("~");
 
   SurfelMap surfel_map(nh);
+  string save_name;
+  string pcd_name = save_name + ".PCD";
+  string mesh_name = save_name + "_mesh.PLY";
 
   ros::Subscriber sub_image = nh.subscribe("image", 5000, &SurfelMap::image_input, &surfel_map);
   ros::Subscriber sub_depth = nh.subscribe("depth", 5000, &SurfelMap::depth_input, &surfel_map);
@@ -40,14 +43,11 @@ int main(int argc, char **argv)
     ros::spinOnce();
   }
 
-  string save_name;
-  if(nh.getParam("save_name", save_name))
-  {
-    string pcd_name = save_name + ".PCD";
-    string mesh_name = save_name + "_mesh.PLY";
-    surfel_map.save_cloud(pcd_name);
-    surfel_map.save_mesh(mesh_name);
-  }
+  std::cout<<"save pc "<<pcd_name<<std::endl;
+  surfel_map.save_cloud(pcd_name);
+  std::cout<<"save mesh "<<mesh_name<<std::endl;
+  surfel_map.save_mesh(mesh_name);
+  //}
 
   return EXIT_SUCCESS;
 }

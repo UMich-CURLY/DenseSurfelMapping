@@ -34,6 +34,7 @@ typedef pcl::PointCloud<PointType> PointCloud;
 using namespace std;
 
 struct PoseElement{
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
     //pose_index is the index in the vector in the database
     vector<SurfelElement> attached_surfels;
     geometry_msgs::Pose cam_pose;
@@ -48,6 +49,7 @@ struct PoseElement{
 class SurfelMap
 {
 public:
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
     SurfelMap(ros::NodeHandle &_nh);
     ~SurfelMap();
 
@@ -78,7 +80,7 @@ public:
     // void get_inactive_surfels();
     // void get_drift_poses(int root_index, vector<int> &drift_poses);
 
-    void pose_ros2eigen(geometry_msgs::Pose &pose, Eigen::Matrix4d &T);
+    void pose_ros2eigen(const geometry_msgs::Pose &pose, Eigen::Ref<Eigen::Matrix4d> T);
     void pose_eigen2ros(Eigen::Matrix4d &T, geometry_msgs::Pose &pose);
 
     // void render_depth(geometry_msgs::Pose &pose);
